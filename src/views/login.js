@@ -3,6 +3,17 @@ import Card from '../components/card'
 import FormGroup from '../components/form-group'
 
 class Login extends React.Component{
+
+    state = {
+        email: '',
+        password: ''
+    }
+
+    enter = () =>{
+        console.log('Email: ', this.state.email);
+        console.log('Password: ', this.state.password);
+    }
+
     render(){
         return(
             <div className = "container">
@@ -16,14 +27,23 @@ class Login extends React.Component{
                                             <fieldset>
                                                 <FormGroup label="Email: *" htmlFor="exempleInputEmail1">
                                                     <input type="email" 
+                                                    value={this.state.email}
+                                                    onChange = {e => this.setState({email: e.target.value})}
                                                     className="form-control"
                                                     id="exampleInputEmail1" 
                                                     aria-describedby="emailHelp"
                                                     placeholder="Digite o Email" />
                                                 </FormGroup>
                                                 <FormGroup label="Password: *" htmlFor="exampleInputPassword1">
-                                                    <input type="password" className="form-control" id="exampleInputPassword1" placeholder="Password" />
+                                                    <input type="password" 
+                                                    value={this.state.password}
+                                                    onChange = {e => this.setState({password: e.target.value})}
+                                                    className="form-control" 
+                                                    id="exampleInputPassword1" 
+                                                    placeholder="Password" />
                                                 </FormGroup>
+                                                <button onClick={this.enter} className="btn btn-success">Sign in</button>
+                                                <button className="btn btn-danger">Sign up</button>
                                             </fieldset>
                                         </div>
                                     </div>
