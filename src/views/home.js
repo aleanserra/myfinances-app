@@ -1,6 +1,6 @@
 import React from 'react'
-import axios from 'axios'
 
+import UserService from '../app/service/userService'
 
 class Home extends React.Component{
 
@@ -8,8 +8,20 @@ class Home extends React.Component{
         balance: 0
     }
 
+    constructor (){
+        super();
+        this.UserService = new UserService();
+
+    }
+
     componentDidMount(){
-        axios.get('http://localhost:8080/api/users/1/balance')
+        const userLoggedString = localStorage.getItem('_user_logged');
+        const userLogged = JSON.parse(userLoggedString);
+
+        console.log(userLogged);
+
+       this.UserService
+            .getBalanceByUser(userLogged.id)
             .then(response =>{
                 this.setState({balance: response.data})
             }).catch(error =>{
