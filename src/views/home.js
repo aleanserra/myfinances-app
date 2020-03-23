@@ -1,6 +1,8 @@
 import React from 'react'
 
 import UserService from '../app/service/userService'
+import LocalStorageService from '../app/service/localstorageService'
+
 
 class Home extends React.Component{
 
@@ -15,8 +17,7 @@ class Home extends React.Component{
     }
 
     componentDidMount(){
-        const userLoggedString = localStorage.getItem('_user_logged');
-        const userLogged = JSON.parse(userLoggedString);
+        const userLogged = LocalStorageService.getItem('_user_logged');
 
         console.log(userLogged);
 
