@@ -3,8 +3,8 @@ import React from 'react'
 import NavbarItem from './navbarItem'
 
 function Navbar(){
-    return(
-        <div className="navbar navbar-expand-lg fixed-top navbar-dark bg-primary">
+  return(
+    <div className="navbar navbar-expand-lg fixed-top navbar-dark bg-primary">
       <div className="container">
         <a href="https://bootswatch.com/" className="navbar-brand">My finances</a>
         <button className="navbar-toggler" type="button" data-toggle="collapse" 
@@ -18,13 +18,11 @@ function Navbar(){
             <NavbarItem href="#/register-users" label="Users"/>
             <NavbarItem href="#/" label="Moviments"/>
             <NavbarItem href="#/login" label="Login"/>
-          
-        </ul>
-
+          </ul>
         </div>
       </div>
     </div>
-    )
+  )
 }
 
 export default Navbar

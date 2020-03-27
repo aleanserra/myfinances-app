@@ -3,6 +3,8 @@ import React from 'react'
 import {withRouter} from 'react-router-dom'
 import Card from '../components/card'
 import FormGroup from '../components/form-group'
+import UserService from '../app/service/userService'
+import {successMessage, errorMessage} from '../components/toastr'
 
 class RegisterUsers extends React.Component{
 
@@ -13,8 +15,27 @@ class RegisterUsers extends React.Component{
         confirmPassword:'',
     }
 
+    constructor(){
+        super();
+        this.service = new UserService();
+    }
+
     save = () =>{
-        console.log(this.state);
+
+        const user = {
+            name: this.state.name,
+            email: this.state.email,
+            password: this.state.password,
+            confirmPassword: this.state.confirmPassword
+        }
+
+        this.service.save(user)
+            .then(response =>{
+                successMessage('Success! Please log in.');
+                this.props.history.push('/login');
+            }).catch(error =>{
+                errorMessage(error.response.data);
+            })
     }
 
     cancel = () =>{
