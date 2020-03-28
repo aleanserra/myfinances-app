@@ -20,7 +20,40 @@ class RegisterUsers extends React.Component{
         this.service = new UserService();
     }
 
+    validate (){
+        const msgs = []
+
+        if(!this.state.name){
+            msgs.push('Please enter name');
+        }
+
+        if(!this.state.email){
+            msgs.push('Please enter email');
+        }else if(!this.state.email.match(/^[a-z0-9.]+@[a-z0-9]+\.[a-z]/)){
+            msgs.push("Invalid email")
+        }
+
+        if(!this.state.password || !this.state.confirmPassword){
+            msgs.push('Enter password and confirm password')
+        }else if(this.state.password !== this.state.confirmPassword){
+            msgs.push('Passwords do not match')
+        }
+
+        return msgs;
+    }
+
     save = () =>{
+        const msgs = this.validate();
+
+        console.log(msgs);
+
+        if(msgs && msgs.length > 0){
+            
+            msgs.forEach((msg,index) =>{
+                errorMessage(msg)
+            });
+            return false;
+        }
 
         const user = {
             name: this.state.name,
@@ -41,6 +74,7 @@ class RegisterUsers extends React.Component{
     cancel = () =>{
         this.props.history.push('/login');
     }
+
 
     render(){
         return (
