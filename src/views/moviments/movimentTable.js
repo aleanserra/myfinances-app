@@ -12,7 +12,16 @@ export default props => {
                 <td>{moviment.month}</td>
                 <td>{moviment.status}</td>
                 <td>
-
+                    <button type="button" 
+                            className="btn btn-primary"
+                            onClick = { e =>props.editAction(moviment.id)}>
+                            Edit
+                    </button>
+                    <button type="button" 
+                            className="btn btn-danger" 
+                            onClick = { e =>props.deleteAction(moviment.id)} >
+                            Delete
+                    </button>
                 </td>
             </tr>
         )

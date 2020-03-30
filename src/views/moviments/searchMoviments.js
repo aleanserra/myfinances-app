@@ -41,6 +41,7 @@ class SearchMoviments extends React.Component {
             description: this.state.description,
             user: userLogged.id
         }
+
         this.service
             .consult(movimentFilter)
             .then(response =>{
@@ -49,7 +50,15 @@ class SearchMoviments extends React.Component {
                 console.log(error)
             })
     }
+
+    edit = (id) =>{
+        console.log('Edit moviment ', id)
+    }
     
+    delete = (id) =>{
+        console.log('Delete moviment ', id)
+    }
+
     render(){
         
         const months = this.service.getMonthList();
@@ -104,7 +113,9 @@ class SearchMoviments extends React.Component {
                 <div className ="row">
                     <div className = "col-md-12">
                         <div className ="bs-component">
-                            <MovimentTable moviments = {this.state.moviments}/>
+                            <MovimentTable moviments = {this.state.moviments} 
+                                           deleteAction ={this.delete}
+                                           editAction ={this.edit}/>
                         </div>
                     </div>
                 </div>
