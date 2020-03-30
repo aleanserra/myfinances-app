@@ -5,45 +5,55 @@ import FormGroup from '../../components/form-group'
 import SelectMenu from '../../components/selectMenu'
 import MovimentTable from './movimentTable'
 
+import MovimentService from '../../app/service/movimentService'
+import LocalStorageService from '../../app/service/localstorageService'
+
+import * as messages from '../../components/toastr'
 class SearchMoviments extends React.Component {
     
     state = {
         year: '',
         month: '',
-        status: '',
+        type: '',
+        description: '',
+        moviments: []
 
+    }
+
+    constructor(){
+        super();
+        this.service = new MovimentService();
     }
 
     search = () =>{
-        console.log(this.state)
+
+        if(!this.state.year){
+            messages.errorMessage("Please enter with year");
+            return false;
+        }
+
+        const userLogged = LocalStorageService.getItem('_user_logged');
+
+        const movimentFilter ={
+            year: this.state.year,
+            month: this.state.month,
+            type: this.state.type,
+            description: this.state.description,
+            user: userLogged.id
+        }
+        this.service
+            .consult(movimentFilter)
+            .then(response =>{
+                this.setState({moviments: response.data})
+            }).catch(error =>{
+                console.log(error)
+            })
     }
     
     render(){
-        const months = [
-            {label: 'Select...', value: ''},
-            {label: 'January', value: 1},
-            {label: 'February', value: 2},
-            {label: 'March', value: 3},
-            {label: 'April', value: 4},
-            {label: 'May', value: 5},
-            {label: 'June', value: 6},
-            {label: 'July', value: 7},
-            {label: 'August', value: 8},
-            {label: 'September', value: 9},
-            {label: 'October', value: 10},
-            {label: 'November', value: 11},
-            {label: 'December', value: 12}
-        ]
-
-        const movimentType = [
-            {label: 'Select...', value: ''},
-            {label: 'Outgo', value: 'OUTGO'},
-            {label: 'Income', value: 'INCOME'}
-        ]
-
-        const moviments = [
-            {id:1, description: 'Salary', value: 5000, month: 1, type: 'Income', status: 'Ok'}
-        ]
+        
+        const months = this.service.getMonthList();
+        const types = this.service.getTypeList();
 
         return(
             <Card title ="Search moviments">
@@ -68,10 +78,20 @@ class SearchMoviments extends React.Component {
                             </FormGroup>
 
                             <FormGroup htmlFor="inputType" label = "Moviment type: *">
-                                <SelectMenu className="form-control" 
+                                <SelectMenu id="inputType"
+                                            className="form-control" 
                                             value={this.state.type}
                                             onChange = {e => this.setState({type:e.target.value})}
-                                            list = {movimentType} />
+                                            list = {types} />
+                            </FormGroup>
+
+                            <FormGroup htmlFor="inputDescription" label = "Description: ">
+                                <input type="text" 
+                                        className="form-control" 
+                                        id="inputDescription" 
+                                        value ={this.state.description}
+                                        onChange={e => this.setState({description: e.target.value})}
+                                        placeholder="Enter Description"/>          
                             </FormGroup>
 
                             <button onClick={this.search} type="button" className="btn btn-success"> Search </button>
@@ -84,7 +104,7 @@ class SearchMoviments extends React.Component {
                 <div className ="row">
                     <div className = "col-md-12">
                         <div className ="bs-component">
-                            <MovimentTable moviments = {moviments}/>
+                            <MovimentTable moviments = {this.state.moviments}/>
                         </div>
                     </div>
                 </div>
