@@ -58,4 +58,8 @@ export default class MovimentService extends ApiService{
 
         return this.get(params);
     }
+
+    deleteMoviment(id){
+        return this.delete(`/${id}`)
+    }
 }

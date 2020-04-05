@@ -1,5 +1,6 @@
 import React from 'react'
 import {withRouter} from 'react-router-dom'
+
 import Card from '../../components/card'
 import FormGroup from '../../components/form-group'
 import SelectMenu from '../../components/selectMenu'
@@ -9,15 +10,19 @@ import MovimentService from '../../app/service/movimentService'
 import LocalStorageService from '../../app/service/localstorageService'
 
 import * as messages from '../../components/toastr'
+
+import {Dialog} from 'primereact/dialog';
+import {Button} from 'primereact/button';
 class SearchMoviments extends React.Component {
     
     state = {
         year: '',
         month: '',
         type: '',
+        showConfirmDialog: false,
         description: '',
+        deleteMov: {},
         moviments: []
-
     }
 
     constructor(){
@@ -54,15 +59,42 @@ class SearchMoviments extends React.Component {
     edit = (id) =>{
         console.log('Edit moviment ', id)
     }
+
+    openConfirm = (moviment) => {
+        this.setState({ showConfirmDialog: true, deleteMov : moviment});
+        //console.log(this.state.deleteMov);
+    }
+
+    deleteCancel = () => {
+        this.setState({ showConfirmDialog: false, deleteMov: {}})
+    }
     
-    delete = (id) =>{
-        console.log('Delete moviment ', id)
+    deleteMoviment = () =>{
+        console.log(this.state.deleteMov.id)
+        this.service
+            .deleteMoviment(this.state.deleteMov.id)
+            .then(response => {
+                const moviments = this.state.moviments;
+                const index = moviments.indexOf(this.state.deleteMov);
+                moviments.splice(index, 1);
+                this.setState({moviments: moviments, showConfirmDialog: false})
+                messages.successMessage('Moviment delete success!')
+            }).catch(error => {
+                messages.errorMessage('Moviment delete error')
+            })
     }
 
     render(){
         
         const months = this.service.getMonthList();
         const types = this.service.getTypeList();
+
+        const confirmDialogFooter = (
+            <div>
+                <Button label="Confirm" icon="pi pi-check" onClick={this.deleteMoviment} />
+                <Button label="Cancel" icon="pi pi-times" onClick={this.deleteCancel} className="p-button-secondary"/>
+            </div>
+        );
 
         return(
             <Card title ="Search moviments">
@@ -114,10 +146,20 @@ class SearchMoviments extends React.Component {
                     <div className = "col-md-12">
                         <div className ="bs-component">
                             <MovimentTable moviments = {this.state.moviments} 
-                                           deleteAction ={this.delete}
+                                           deleteAction ={this.openConfirm}
                                            editAction ={this.edit}/>
                         </div>
                     </div>
+                </div>
+                <div>
+                <Dialog header="Confirm" 
+                        visible={this.state.showConfirmDialog} 
+                        style={{width: '50vw'}} 
+                        modal={true} 
+                        footer={confirmDialogFooter}
+                        onHide={() => this.setState({showConfirmDialog: false})}>
+                  Delete moviment 
+                </Dialog>
                 </div>
             </Card>
         )
