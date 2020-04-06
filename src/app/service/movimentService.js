@@ -32,6 +32,10 @@ export default class MovimentService extends ApiService{
         ]
     }
 
+    save(moviment){
+        return this.post('/', moviment)
+    }
+
     consult(movimentFilter){
         
         let params = `?year=${movimentFilter.year}`
