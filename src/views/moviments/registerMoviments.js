@@ -23,6 +23,12 @@ class RegisterMoviments extends React.Component {
     this.service = new MovimentService();
   }
 
+  componentDidMount() {
+    const params = this.props.match.params;
+
+    console.log("params : ", params);
+  }
+
   submit = () => {
     const currentUser = LocalStorageService.getItem("_user_logged");
     const { description, value, month, year, type } = this.state;
@@ -38,6 +44,7 @@ class RegisterMoviments extends React.Component {
     this.service
       .save(moviment)
       .then((response) => {
+        this.props.history.push("/searchMoviments");
         messages.successMessage("Moviment registred with success!");
       })
       .catch((error) => {
@@ -139,12 +146,16 @@ class RegisterMoviments extends React.Component {
           <div className="col-md-6">
             <button
               className="btn btn-success"
-              type="button"
               onClick={this.submit}
+              type="button"
             >
               Save
             </button>
-            <button className="btn btn-danger" type="button">
+            <button
+              className="btn btn-danger"
+              type="button"
+              onClick={(e) => this.props.history.push("/searchMoviments")}
+            >
               Cancel
             </button>
           </div>

@@ -16,7 +16,10 @@ function Routes() {
         <Route path="/login" component={Login}></Route>
         <Route path="/register-users" component={RegisterUsers}></Route>
         <Route path="/searchMoviments" component={SearchMoviments}></Route>
-        <Route path="/registerMoviments" component={RegisterMoviments}></Route>
+        <Route
+          path="/registerMoviments/:id"
+          component={RegisterMoviments}
+        ></Route>
       </Switch>
     </HashRouter>
   );

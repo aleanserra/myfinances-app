@@ -56,7 +56,7 @@ class SearchMoviments extends React.Component {
   };
 
   edit = (id) => {
-    console.log("Edit moviment ", id);
+    this.props.history.push(`/registerMoviments/${id}`);
   };
 
   openConfirm = (moviment) => {
@@ -82,6 +82,10 @@ class SearchMoviments extends React.Component {
       .catch((error) => {
         messages.errorMessage("Moviment delete error");
       });
+  };
+
+  preperRegisterForm = () => {
+    this.props.history.push("/registerMoviments");
   };
 
   render() {
@@ -158,12 +162,14 @@ class SearchMoviments extends React.Component {
                 type="button"
                 className="btn btn-success"
               >
-                {" "}
-                Search{" "}
+                Search
               </button>
-              <button type="button" className="btn btn-danger">
-                {" "}
-                Register{" "}
+              <button
+                type="button"
+                className="btn btn-danger"
+                onClick={this.preperRegisterForm}
+              >
+                Register
               </button>
             </div>
           </div>
