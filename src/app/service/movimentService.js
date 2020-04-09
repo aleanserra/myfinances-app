@@ -23,6 +23,10 @@ export default class MovimentService extends ApiService {
     ];
   }
 
+  getById(id) {
+    return this.get(`/${id}`);
+  }
+
   getTypeList() {
     return [
       { label: "Select...", value: "" },
@@ -33,6 +37,10 @@ export default class MovimentService extends ApiService {
 
   save(moviment) {
     return this.post("/", moviment);
+  }
+
+  update(moviment) {
+    return this.put(`/${moviment.id}`, moviment);
   }
 
   consult(movimentFilter) {

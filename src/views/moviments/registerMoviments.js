@@ -16,6 +16,7 @@ class RegisterMoviments extends React.Component {
     year: "",
     type: "",
     status: "",
+    user: null,
   };
 
   constructor() {
@@ -25,8 +26,16 @@ class RegisterMoviments extends React.Component {
 
   componentDidMount() {
     const params = this.props.match.params;
-
-    console.log("params : ", params);
+    if (params.id) {
+      this.service
+        .getById(params.id)
+        .then((response) => {
+          this.setState({ ...response.data });
+        })
+        .catch((errors) => {
+          messages.errorMessage(errors.response.data);
+        });
+    }
   }
 
   submit = () => {
@@ -46,6 +55,39 @@ class RegisterMoviments extends React.Component {
       .then((response) => {
         this.props.history.push("/searchMoviments");
         messages.successMessage("Moviment registred with success!");
+      })
+      .catch((error) => {
+        messages.errorMessage(error.response.data);
+      });
+  };
+
+  edit = () => {
+    const {
+      description,
+      value,
+      month,
+      year,
+      type,
+      status,
+      user,
+      id,
+    } = this.state;
+    const moviment = {
+      description,
+      value,
+      month,
+      year,
+      type,
+      user,
+      status,
+      id,
+    };
+
+    this.service
+      .update(moviment)
+      .then((response) => {
+        this.props.history.push("/searchMoviments");
+        messages.successMessage("Moviment edited with success!");
       })
       .catch((error) => {
         messages.errorMessage(error.response.data);
@@ -150,6 +192,13 @@ class RegisterMoviments extends React.Component {
               type="button"
             >
               Save
+            </button>
+            <button
+              className="btn btn-primary"
+              onClick={this.edit}
+              type="button"
+            >
+              Edit
             </button>
             <button
               className="btn btn-danger"
