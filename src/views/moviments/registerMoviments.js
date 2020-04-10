@@ -17,6 +17,7 @@ class RegisterMoviments extends React.Component {
     type: "",
     status: "",
     user: null,
+    statusPage: null,
   };
 
   constructor() {
@@ -30,7 +31,7 @@ class RegisterMoviments extends React.Component {
       this.service
         .getById(params.id)
         .then((response) => {
-          this.setState({ ...response.data });
+          this.setState({ ...response.data, statusPage: "edit" });
         })
         .catch((errors) => {
           messages.errorMessage(errors.response.data);
@@ -49,6 +50,14 @@ class RegisterMoviments extends React.Component {
       type,
       user: currentUser.id,
     };
+
+    try {
+      this.service.validate(moviment);
+    } catch (error) {
+      const messageList = error.messages;
+      messageList.forEach((msg) => messages.errorMessage(msg));
+      return false;
+    }
 
     this.service
       .save(moviment)
@@ -106,7 +115,11 @@ class RegisterMoviments extends React.Component {
     const months = this.service.getMonthList();
 
     return (
-      <Card title="Register moviment">
+      <Card
+        title={
+          this.state.statusPage === "edit" ? "Edit moviment" : "New moviment"
+        }
+      >
         <div className="row">
           <div className="col-md-6">
             <FormGroup id="description" label="Description: *">
@@ -186,26 +199,29 @@ class RegisterMoviments extends React.Component {
         </div>
         <div className="row">
           <div className="col-md-6">
-            <button
-              className="btn btn-success"
-              onClick={this.submit}
-              type="button"
-            >
-              Save
-            </button>
-            <button
-              className="btn btn-primary"
-              onClick={this.edit}
-              type="button"
-            >
-              Edit
-            </button>
+            {this.state.statusPage === "edit" ? (
+              <button
+                className="btn btn-primary"
+                onClick={this.edit}
+                type="button"
+              >
+                <i className="pi pi-refresh"></i>Edit
+              </button>
+            ) : (
+              <button
+                className="btn btn-success"
+                onClick={this.submit}
+                type="button"
+              >
+                <i className="pi pi-save"></i>Save
+              </button>
+            )}
             <button
               className="btn btn-danger"
               type="button"
               onClick={(e) => this.props.history.push("/searchMoviments")}
             >
-              Cancel
+              <i className="pi pi-times"></i>Cancel
             </button>
           </div>
         </div>

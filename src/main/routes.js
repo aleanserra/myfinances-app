@@ -17,7 +17,7 @@ function Routes() {
         <Route path="/register-users" component={RegisterUsers}></Route>
         <Route path="/searchMoviments" component={SearchMoviments}></Route>
         <Route
-          path="/registerMoviments/:id"
+          path="/registerMoviments/:id?"
           component={RegisterMoviments}
         ></Route>
       </Switch>

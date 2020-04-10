@@ -48,7 +48,11 @@ class SearchMoviments extends React.Component {
     this.service
       .consult(movimentFilter)
       .then((response) => {
-        this.setState({ moviments: response.data });
+        const list = response.data;
+        if (list.length < 1) {
+          messages.alertMessage("No results");
+        }
+        this.setState({ moviments: list });
       })
       .catch((error) => {
         console.log(error);
@@ -86,6 +90,20 @@ class SearchMoviments extends React.Component {
 
   preperRegisterForm = () => {
     this.props.history.push("/registerMoviments");
+  };
+
+  changeStatus = (moviment, status) => {
+    this.service.changeStatus(moviment.id, status).then((response) => {
+      const moviments = this.state.moviments;
+      const index = moviments.indexOf(moviment);
+      if (index !== -1) {
+        moviment["status"] = status;
+        moviments[index] = moviment;
+        this.setState({ moviments });
+      }
+
+      messages.successMessage("Update status with success.");
+    });
   };
 
   render() {
@@ -162,14 +180,14 @@ class SearchMoviments extends React.Component {
                 type="button"
                 className="btn btn-success"
               >
-                Search
+                <i className="pi pi-search"></i> Search
               </button>
               <button
                 type="button"
                 className="btn btn-danger"
                 onClick={this.preperRegisterForm}
               >
-                Register
+                <i className="pi pi-plus"></i> Register
               </button>
             </div>
           </div>
@@ -182,6 +200,7 @@ class SearchMoviments extends React.Component {
                 moviments={this.state.moviments}
                 deleteAction={this.openConfirm}
                 editAction={this.edit}
+                changeStatus={this.changeStatus}
               />
             </div>
           </div>

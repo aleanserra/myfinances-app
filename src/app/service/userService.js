@@ -1,22 +1,46 @@
-import ApiService from '../apiservice'
+import ApiService from "../apiservice";
+import ErrorValidate from "../exception/errorValidate";
+class UserService extends ApiService {
+  constructor() {
+    super("/api/users");
+  }
 
-class UserService extends ApiService{
+  authenticate(credentials) {
+    return this.post("/authenticate", credentials);
+  }
 
-    constructor(){
-        super('/api/users');
+  getBalanceByUser(id) {
+    return this.get(`/${id}/balance`);
+  }
+
+  save(user) {
+    return this.post("", user);
+  }
+
+  validate(user) {
+    const errorList = [];
+
+    if (!user.name) {
+      errorList.push("Please enter name");
     }
 
-    authenticate(credentials){
-        return this.post('/authenticate', credentials);
+    if (!user.email) {
+      errorList.push("Please enter email");
+    } else if (!user.email.match(/^[a-z0-9.]+@[a-z0-9]+\.[a-z]/)) {
+      errorList.push("Invalid email");
     }
 
-    getBalanceByUser(id){
-        return this.get(`/${id}/balance`);
+    if (!user.password || !user.confirmPassword) {
+      errorList.push("Enter password and confirm password");
+    } else if (user.password !== user.confirmPassword) {
+      errorList.push("Passwords do not match");
     }
 
-    save(user){
-        return this.post('', user);
+    if (errorList && errorList.length > 0) {
+      console.log(errorList);
+      throw new ErrorValidate(errorList);
     }
+  }
 }
 
 export default UserService;

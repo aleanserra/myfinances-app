@@ -1,5 +1,5 @@
 import ApiService from "../apiservice";
-
+import ErrorValidate from "../exception/errorValidate";
 export default class MovimentService extends ApiService {
   constructor() {
     super("api/moviments");
@@ -25,6 +25,39 @@ export default class MovimentService extends ApiService {
 
   getById(id) {
     return this.get(`/${id}`);
+  }
+
+  changeStatus(id, status) {
+    return this.put(`/${id}/update-status`, { status });
+  }
+
+  validate(moviment) {
+    const errorList = [];
+
+    if (!moviment.year) {
+      errorList.push("Inform the year.");
+    }
+
+    if (!moviment.month) {
+      errorList.push("Inform the month.");
+    }
+
+    if (!moviment.description) {
+      errorList.push("Inform the description.");
+    }
+
+    if (!moviment.value) {
+      errorList.push("Inform the value.");
+    }
+
+    if (!moviment.type) {
+      errorList.push("Inform the type.");
+    }
+
+    if (errorList && errorList.length > 0) {
+      console.log(errorList);
+      throw new ErrorValidate(errorList);
+    }
   }
 
   getTypeList() {
