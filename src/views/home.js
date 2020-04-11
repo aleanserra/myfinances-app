@@ -2,6 +2,7 @@ import React from "react";
 
 import UserService from "../app/service/userService";
 import LocalStorageService from "../app/service/localstorageService";
+import currencyFormatter from "currency-formatter";
 
 class Home extends React.Component {
   state = {
@@ -20,7 +21,9 @@ class Home extends React.Component {
 
     this.UserService.getBalanceByUser(userLogged.id)
       .then((response) => {
-        this.setState({ balance: response.data });
+        this.setState({
+          balance: response.data,
+        });
       })
       .catch((error) => {
         console.error(error.response);
@@ -30,15 +33,16 @@ class Home extends React.Component {
   render() {
     return (
       <div className="jumbotron">
-        <h1 className="display-3">Bem vindo!</h1>
-        <p className="lead">Esse é seu sistema de finanças.</p>
+        <h1 className="display-5"> Welcome! </h1>
+        <p className="lead"> This is your finance system. </p>
         <p className="lead">
-          Seu saldo para o mês atual é de R$ {this.state.balance}
+          Your balance for the current month is{" "}
+          {currencyFormatter.format(this.state.balance, { locale: "pt-PT" })}
         </p>
         <hr className="my-4" />
         <p>
-          E essa é sua área administrativa, utilize um dos menus ou botões
-          abaixo para navegar pelo sistema.
+          And this is your administrative area, use one of the menus or buttons
+          below to browse the system.
         </p>
         <p className="lead">
           <a
@@ -46,14 +50,14 @@ class Home extends React.Component {
             href="#/register-users"
             role="button"
           >
-            <i className="fa fa-users"></i> Cadastrar Usuário
+            <i className="pi pi-users"> </i> Register user
           </a>
           <a
             className="btn btn-danger btn-lg"
             href="#/registerMoviments"
             role="button"
           >
-            <i className="fa fa-users"></i> Cadastrar Lançamento
+            <i className="pi pi-money-bill"> </i> Register moviment
           </a>
         </p>
       </div>
