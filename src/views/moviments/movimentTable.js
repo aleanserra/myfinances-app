@@ -16,7 +16,7 @@ export default (props) => {
             disabled={moviment.status !== "PENDING"}
             title="Effectuate"
             className="btn btn-success"
-            onClick={(e) => props.changeStatus(moviment, "RELEASED")}
+            onClick={(e) => props.changeStatus(moviment, "EFFECTIVED")}
           >
             <i className="pi pi-check"></i>
           </button>

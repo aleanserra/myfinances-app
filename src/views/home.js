@@ -1,9 +1,9 @@
 import React from "react";
 
 import UserService from "../app/service/userService";
-import LocalStorageService from "../app/service/localstorageService";
-import currencyFormatter from "currency-formatter";
+import { AuthContext } from "../main/authenticateProvider";
 
+import currencyFormatter from "currency-formatter";
 class Home extends React.Component {
   state = {
     balance: 0,
@@ -11,15 +11,16 @@ class Home extends React.Component {
 
   constructor() {
     super();
-    this.UserService = new UserService();
+    this.userService = new UserService();
   }
 
   componentDidMount() {
-    const userLogged = LocalStorageService.getItem("_user_logged");
+    const userLogged = this.context.userAuthenticated;
 
     console.log(userLogged);
 
-    this.UserService.getBalanceByUser(userLogged.id)
+    this.userService
+      .getBalanceByUser(userLogged.id)
       .then((response) => {
         this.setState({
           balance: response.data,
@@ -64,5 +65,7 @@ class Home extends React.Component {
     );
   }
 }
+
+Home.contextType = AuthContext;
 
 export default Home;

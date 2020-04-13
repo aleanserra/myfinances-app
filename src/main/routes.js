@@ -2,19 +2,23 @@ import React from "react";
 
 import Login from "../views/login";
 import Home from "../views/home";
-import AuthService from "../app/service/authService";
 import RegisterUsers from "../views/registerUser";
 import SearchMoviments from "../views/moviments/searchMoviments";
 import RegisterMoviments from "../views/moviments/registerMoviments";
 
 import { Route, Switch, HashRouter, Redirect } from "react-router-dom";
+import { AuthConsumer } from "../main/authenticateProvider";
 
-function RouteAuthenticated({ component: Component, ...props }) {
+function RouteAuthenticated({
+  component: Component,
+  isUserAuthenticated,
+  ...props
+}) {
   return (
     <Route
       {...props}
       render={(componentProps) => {
-        if (AuthService.isUserAuthenticated()) {
+        if (isUserAuthenticated) {
           return <Component {...componentProps} />;
         } else {
           return (
@@ -31,19 +35,25 @@ function RouteAuthenticated({ component: Component, ...props }) {
   );
 }
 
-function Routes() {
+function Routes(props) {
   return (
     <HashRouter>
       <Switch>
         <Route path="/login" component={Login}></Route>
         <Route path="/register-users" component={RegisterUsers}></Route>
 
-        <RouteAuthenticated path="/home" component={Home}></RouteAuthenticated>
         <RouteAuthenticated
+          isUserAuthenticated={props.isUserAuthenticated}
+          path="/home"
+          component={Home}
+        ></RouteAuthenticated>
+        <RouteAuthenticated
+          isUserAuthenticated={props.isUserAuthenticated}
           path="/searchMoviments"
           component={SearchMoviments}
         ></RouteAuthenticated>
         <RouteAuthenticated
+          isUserAuthenticated={props.isUserAuthenticated}
           path="/registerMoviments/:id?"
           component={RegisterMoviments}
         ></RouteAuthenticated>
@@ -52,4 +62,8 @@ function Routes() {
   );
 }
 
-export default Routes;
+export default () => (
+  <AuthConsumer>
+    {(context) => <Routes isUserAuthenticated={context.isAuthenticated} />}
+  </AuthConsumer>
+);
