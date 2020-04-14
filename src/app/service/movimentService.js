@@ -55,7 +55,6 @@ export default class MovimentService extends ApiService {
     }
 
     if (errorList && errorList.length > 0) {
-      console.log(errorList);
       throw new ErrorValidate(errorList);
     }
   }

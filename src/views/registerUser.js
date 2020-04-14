@@ -5,6 +5,7 @@ import Card from "../components/card";
 import FormGroup from "../components/form-group";
 import UserService from "../app/service/userService";
 import { successMessage, errorMessage } from "../components/toastr";
+import { AuthContext } from "../main/authenticateProvider";
 
 class RegisterUsers extends React.Component {
   state = {
@@ -43,7 +44,13 @@ class RegisterUsers extends React.Component {
   };
 
   cancel = () => {
-    this.props.history.push("/login");
+    const isUserLogged = this.context.isAuthenticated;
+
+    if (isUserLogged) {
+      this.props.history.push("/home");
+    } else {
+      this.props.history.push("/login");
+    }
   };
 
   render() {
@@ -114,5 +121,5 @@ class RegisterUsers extends React.Component {
     );
   }
 }
-
+RegisterUsers.contextType = AuthContext;
 export default withRouter(RegisterUsers);

@@ -17,8 +17,6 @@ class Home extends React.Component {
   componentDidMount() {
     const userLogged = this.context.userAuthenticated;
 
-    console.log(userLogged);
-
     this.userService
       .getBalanceByUser(userLogged.id)
       .then((response) => {

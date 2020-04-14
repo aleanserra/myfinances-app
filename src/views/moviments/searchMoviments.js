@@ -65,7 +65,6 @@ class SearchMoviments extends React.Component {
 
   openConfirm = (moviment) => {
     this.setState({ showConfirmDialog: true, deleteMov: moviment });
-    //console.log(this.state.deleteMov);
   };
 
   deleteCancel = () => {
@@ -73,7 +72,6 @@ class SearchMoviments extends React.Component {
   };
 
   deleteMoviment = () => {
-    console.log(this.state.deleteMov.id);
     this.service
       .deleteMoviment(this.state.deleteMov.id)
       .then((response) => {
