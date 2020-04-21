@@ -2,6 +2,7 @@ import React from "react";
 
 import Login from "../views/login";
 import Home from "../views/home";
+import About from "../views/about";
 import RegisterUsers from "../views/registerUser";
 import SearchMoviments from "../views/moviments/searchMoviments";
 import RegisterMoviments from "../views/moviments/registerMoviments";
@@ -19,8 +20,10 @@ function RouteAuthenticated({
       {...props}
       render={(componentProps) => {
         if (isUserAuthenticated) {
+          console.log("if :", isUserAuthenticated);
           return <Component {...componentProps} />;
         } else {
+          console.log("else", isUserAuthenticated);
           return (
             <Redirect
               to={{
@@ -36,11 +39,13 @@ function RouteAuthenticated({
 }
 
 function Routes(props) {
+  console.log("Props of router", props.isUserAuthenticated);
   return (
     <HashRouter>
       <Switch>
         <Route path="/login" component={Login}></Route>
         <Route path="/register-users" component={RegisterUsers}></Route>
+        <Route path="/about" component={About}></Route>
 
         <RouteAuthenticated
           isUserAuthenticated={props.isUserAuthenticated}

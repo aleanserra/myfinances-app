@@ -5,6 +5,7 @@ export const USER_LOGGED = "_user_logged";
 export default class AuthService {
   static isUserAuthenticated() {
     const user = LocalStorageService.getItem(USER_LOGGED);
+    console.log("isuser", user);
     return user && user.id;
   }
 
